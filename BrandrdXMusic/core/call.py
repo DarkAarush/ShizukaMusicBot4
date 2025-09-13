@@ -1,5 +1,3 @@
-
-
 import asyncio
 import os
 from datetime import datetime, timedelta
@@ -7,18 +5,21 @@ from typing import Union
 
 from pyrogram import Client
 from pyrogram.types import InlineKeyboardMarkup
+from ntgcalls import TelegramServerError
 from pytgcalls import PyTgCalls
 from pytgcalls.exceptions import (
+    AlreadyJoinedError,
     NoActiveGroupCall,
 )
-from ntgcalls import TelegramServerError
-from pytgcalls.types import Update, StreamEnded
-from pytgcalls import filters as fl
-from pytgcalls.types import AudioQuality, VideoQuality
-from pytgcalls.types import MediaStream,ChatUpdate
+from pytgcalls.types import (
+    MediaStream,
+    AudioQuality,
+    VideoQuality,
+    Update,
+)
+from pytgcalls.types.stream import StreamAudioEnded
 
 import config
-from config import autoclean
 from BrandrdXMusic import LOGGER, YouTube, app
 from BrandrdXMusic.misc import db
 from BrandrdXMusic.utils.database import (
@@ -33,10 +34,11 @@ from BrandrdXMusic.utils.database import (
     remove_active_video_chat,
     set_loop,
 )
-from AnonXMusic.utils.exceptions import AssistantErr
-from AnonXMusic.utils.formatters import check_duration, seconds_to_min, speed_converter
-from AnonXMusic.utils.inline.play import stream_markup
-from AnonXMusic.utils.thumbnails import get_thumb
+from BrandrdXMusic.utils.exceptions import AssistantErr
+from BrandrdXMusic.utils.formatters import check_duration, seconds_to_min, speed_converter
+from BrandrdXMusic.utils.inline.play import stream_markup, stream_markup2
+from BrandrdXMusic.utils.stream.autoclear import auto_clean
+from BrandrdXMusic.utils.thumbnails import get_thumb
 from strings import get_string
 from AnonXMusic.platforms.Youtube import cookie_txt_file
 
