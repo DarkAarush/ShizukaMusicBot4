@@ -40,7 +40,7 @@ from BrandrdXMusic.utils.inline.play import stream_markup, stream_markup2
 from BrandrdXMusic.utils.stream.autoclear import auto_clean
 from BrandrdXMusic.utils.thumbnails import get_thumb
 from strings import get_string
-from AnonXMusic.platforms.Youtube import cookie_txt_file
+from BrandrdXMusic.platforms.Youtube import cookie_txt_file
 
 autoend = {}
 counter = {}
