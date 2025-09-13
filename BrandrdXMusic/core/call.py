@@ -674,4 +674,4 @@ class Call(PyTgCalls):
 
 
 
-Hotty= Call()
+Hotty = Call()
