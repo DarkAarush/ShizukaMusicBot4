@@ -1,4 +1,5 @@
 
+
 import asyncio
 import os
 from datetime import datetime, timedelta
@@ -282,6 +283,49 @@ class Call(PyTgCalls):
         )
         await asyncio.sleep(0.2)
         await assistant.leave_call(config.LOGGER_ID)
+
+        
+
+    async def _update_animation(self, chat_id, message):
+        """Update animation with error handling"""
+        try:
+            while chat_id in self.animation_tasks:
+                # Get current playback info
+                if chat_id not in db:
+                    break
+                    
+                current = db[chat_id][0]
+                played = current.get("played", "0:00")
+                duration = current.get("dur", "0:00")
+                
+                # Update markup
+                markup = InlineKeyboardMarkup(
+                    stream_markup_timer(_, chat_id, played, duration)
+                )
+                
+                await message.edit_reply_markup(reply_markup=markup)
+                await asyncio.sleep(1)  # Update every second
+                
+        except Exception as e:
+            LOGGER(__name__).error(f"Animation error: {str(e)}")
+        finally:
+            if chat_id in self.animation_tasks:
+                del self.animation_tasks[chat_id]
+
+    async def start_animation(self, chat_id, message):
+        """Start animation handling"""
+        # Stop existing animation if any
+        await self.stop_animation(chat_id)
+        
+        # Start new animation
+        task = asyncio.create_task(self._update_animation(chat_id, message))
+        self.animation_tasks[chat_id] = task
+
+    async def stop_animation(self, chat_id):
+        """Stop animation cleanly"""
+        if chat_id in self.animation_tasks:
+            self.animation_tasks[chat_id].cancel()
+            del self.animation_tasks[chat_id]
 
     async def join_call(
         self,
@@ -629,4 +673,5 @@ class Call(PyTgCalls):
             await self.change_stream(client, update.chat_id)
 
 
-Hotty = Call()
+
+Hotty= Call()
